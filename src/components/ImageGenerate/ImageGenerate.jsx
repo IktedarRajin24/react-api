@@ -1,6 +1,8 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable no-unused-vars */
 import axios from 'axios';
 import React, { useState } from 'react';
+import { useQuery } from 'react-query';
 
 const ImageGenerate = () => {
     const [imageName, setImageName] = useState('');
@@ -13,7 +15,7 @@ const ImageGenerate = () => {
         e.preventDefault();
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
-        myHeaders.append("Authorization", "Bearer 76856098d882ec5d0ed69efb98780c1ece7b9e19d3bfe7a5b4d844645e079727b74a8b2d9f39d0095e387874cde5ba23b488ee66460c8544e65980979851cf53");
+        myHeaders.append("Authorization", `Bearer ${import.meta.env.VITE_REACT_APP_AMETHYSTE_KEY}`);
 
         var urlencoded = new URLSearchParams();
         urlencoded.append("url", "https://i.ibb.co/pLQWFvM/J-P-D-98255-1.jpg");
@@ -25,13 +27,18 @@ const ImageGenerate = () => {
         redirect: 'follow'
         };
         setIsLoading(true)
-        imageName && fetch(`https://v1.api.amethyste.moe/generate/${imageName}`, requestOptions)
-        .then(res => res.blob())
-        .then(data => {
-            const objectURL = URL.createObjectURL(data);
-            setImageUrl(objectURL)
-        })
-        .catch(error => console.log(error))
+        console.log(imageName)
+        if(imageName){
+            const {data: image_url} = useQuery(`https://v1.api.amethyste.moe/generate/${imageName}`, requestOptions)
+            console.log(image_url)
+        }  
+        // fetch(`https://v1.api.amethyste.moe/generate/${imageName}`, requestOptions)
+        // .then(res => res.blob())
+        // .then(data => {
+        //     const objectURL = URL.createObjectURL(data);
+        //     setImageUrl(objectURL)
+        // })
+        // .catch(error => console.log(error))
         setIsLoading(false)
         
     }

@@ -13,13 +13,16 @@
     "@auth0/auth0-react": "^2.2.1",
     "amethyste-api": "^1.1.6",
     "axios": "^1.5.0",
+    "dotenv": "^16.3.1",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-fast-marquee": "^1.6.0",
+    "react-query": "^3.39.3",
     "react-router-dom": "^6.16.0",
-    "sort-by": "^1.2.0"
+    "sort-by": "^1.2.0",
+    "swr": "^2.2.4"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",
@@ -31,6 +34,8 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
     "postcss": "^8.4.30",
+    "process": "^0.11.10",
+    "react-error-overlay": "^6.0.9",
     "tailwindcss": "^3.3.3",
     "vite": "^4.4.5"
   }

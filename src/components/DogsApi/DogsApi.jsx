@@ -1,5 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
+import { useQuery } from 'react-query';
+import getData from '../../Utilities/useFetch';
 
 const DogsApi = () => {
     const [dogs, setDogs] = useState([])
@@ -8,19 +10,25 @@ const DogsApi = () => {
     const [breed, setBreed] = useState('Affenpinscher')
     const [isLoading, setIsLoading] = useState(false);
 
-    useEffect(()=>{
-        fetch('https://api.thedogapi.com/v1/breeds')
-        .then(res => res.json())
-        .then(data => setBreeds(data))
-    },[])
+    // useEffect(()=>{
+    //     fetch('https://api.thedogapi.com/v1/breeds')
+    //     .then(res => res.json())
+    //     .then(data => setBreeds(data))
+    // },[])
 
-    useEffect(()=>{
-        setIsLoading(true);
-        breed && fetch(`https://api.thedogapi.com/v1/images/search?breed_names=${breed}`)
-        .then(res => res.json())
-        .then(data => setDogs(data))
-        setIsLoading(false)
-    },[breed])
+    const {data: breeds_data} = useQuery('breeds', ()=> getData('https://api.thedogapi.com/v1/breeds'))
+    // console.log(breeds_data)
+
+    const {data: dog_data} = useQuery('dogs-data', ()=> getData(`https://api.thedogapi.com/v1/images/search?breed_names=${breed}`))
+    // console.log(dog_data)
+
+    // useEffect(()=>{
+    //     setIsLoading(true);
+    //     breed && fetch(`https://api.thedogapi.com/v1/images/search?breed_names=${breed}`)
+    //     .then(res => res.json())
+    //     .then(data => setDogs(data))
+    //     setIsLoading(false)
+    // },[breed])
 
     
 
@@ -30,7 +38,7 @@ const DogsApi = () => {
     }
 
     
-    const found = breeds.find((b) => b.name === breed)
+    const found = breeds_data?.find((b) => b.name === breed)
     
 
     return (
@@ -41,16 +49,14 @@ const DogsApi = () => {
                 <select  onChange={handleFilterValue} className='w-1/2 h-10 mb-10 rounded-full text-slate-400 text-center' name="dogs" id="dogs">
                     {
                         
-                        breeds.map(breed => <option className='' key={breed.id} value={breed.name}>{breed.name}</option>)
+                        breeds_data?.map(breed => <option className='' key={breed.id} value={breed.name}>{breed.name}</option>)
                     }                
                 </select>
                 <div className='dogs-section w-11/12 pb-40'>
                     
                     
-                    {
-                        isLoading? "Loading..." :
-                        
-                        dogs && dogs.map(dog =>
+                    { 
+                        dog_data && dog_data.map(dog =>
                         <div className='bg-white w-11/12 mx-auto p-5 h-full' key={dog.id}>
                             <img className='h-60 mx-auto object-contain'  src={dog.url} alt="" />
                             <p className='text-xl font-bold text-red-600 my-5 text-center'>{breed}</p>

@@ -1,16 +1,22 @@
+/* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import Marquee from "react-fast-marquee";
 import CoinData from '../CoinData/CoinData';
 import axios from 'axios';
+import getData from '../../Utilities/useFetch';
+import useSWR from 'swr';
+import { useQuery } from 'react-query';
 
 const CoinLayer = () => {
-    const [coinData, setCoinData] = useState({});
-    useEffect(()=>{
-        // fetch('http://api.coinlayer.com/live?access_key=e421467f98106b6a82b69034a47a7a97&expand=1')
-        axios.get('http://api.coinlayer.com/live?access_key=e421467f98106b6a82b69034a47a7a97&expand=1')
-        .then(res => setCoinData(res.data))
-    },[])
+    // const { data } = useSWR('http://api.coinlayer.com/live?access_key=e421467f98106b6a82b69034a47a7a97&expand=1', useFetch, {
+    //     suspense: true
+    // });
+
+    // console.log(import.meta.env.VITE_REACT_APP_COIN_ACCESS_KEY);
+
+    const {data} = useQuery('coin-data', () => getData(`http://api.coinlayer.com/live?access_key=${import.meta.env.VITE_REACT_APP_COIN_ACCESS_KEY}&expand=1`))
+    // console.log(data)
     
     return (
         <div className='bg-blue-500 h-96'>
@@ -23,9 +29,10 @@ const CoinLayer = () => {
                     <img src="images/coin.jpg" className='w-1/2 mx-auto rounded-full' alt="" />
                 </div>
             </div>
+            
             <Marquee pauseOnHover speed={100}>
                 {
-                    Object.keys(coinData).length>0 && <CoinData data={coinData} rates={coinData.rates}/>
+                    data && Object.keys(data).length>0 && <CoinData data={data} rates={data.rates}/>
                 }
             </Marquee>
         </div>

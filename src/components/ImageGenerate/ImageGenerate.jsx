@@ -27,8 +27,9 @@ const ImageGenerate = () => {
         redirect: 'follow'
         };
         setIsLoading(true)
-        console.log(imageName)
         if(imageName){
+            console.log(imageName)
+
             const {data: image_url} = useQuery(`https://v1.api.amethyste.moe/generate/${imageName}`, requestOptions)
             console.log(image_url)
         }  
